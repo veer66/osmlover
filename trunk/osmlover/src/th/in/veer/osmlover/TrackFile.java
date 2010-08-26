@@ -53,8 +53,9 @@ class TrackFile {
     }
 
     public void log(double lat, double lon, double ele,
-            long timestamp) {
-        out.println(GpxUtil.toGpx(lat, lon, ele, timestamp));
+            long timestamp, String note) {
+        // TODO: add note
+        out.println(GpxUtil.toGpx(lat, lon, ele, timestamp, note));
     }
 
     public void close() throws IOException {

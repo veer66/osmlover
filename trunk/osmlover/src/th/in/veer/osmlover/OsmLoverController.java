@@ -29,6 +29,7 @@ class OsmLoverController {
     private OsmLoverMidlet midlet;
     private Display display;
     private TrackerScreen trackerScreen;
+    private NoteScreen noteScreen;
     private LocationHandler locationHandler;
     private TrackFile trackFile;
     public static final int INACTIVE = 0;
@@ -39,12 +40,16 @@ class OsmLoverController {
     private int gpsStatus = OsmLoverController.INACTIVE;
     private int logStatus = OsmLoverController.PAUSE;
 
+    private String note;
+
     public OsmLoverController(OsmLoverMidlet midlet) {
         this.midlet = midlet;
         display = Display.getDisplay(midlet);
         trackerScreen = new TrackerScreen(this);
+        noteScreen = new NoteScreen(this);
         locationHandler = new LocationHandler(this);
         trackFile = new TrackFile();
+        note = null;
     }
 
     public void onResume() {
@@ -69,10 +74,11 @@ class OsmLoverController {
 
     public void updateLocation(double lat, double lon, double ele,
             long timestamp) {
-        String gpxText = GpxUtil.toGpx(lat, lon, ele, timestamp);
         trackerScreen.setLocation(lat, lon);
+
         if(logStatus == OsmLoverController.TRACKING) {
-            trackFile.log(lat, lon, ele, timestamp);
+            trackFile.log(lat, lon, ele, timestamp, note);
+            note = null;
         }
     }
 
@@ -82,8 +88,7 @@ class OsmLoverController {
             midlet.destroyApp(true);
             midlet.notifyDestroyed();
         } catch (MIDletStateChangeException ex) {
-            Alert alert = new Alert("Cannot close file", ex.getMessage(), null, null);
-            display.setCurrent(alert, trackerScreen);
+
         }
     }
 
@@ -105,7 +110,18 @@ class OsmLoverController {
         try {
             trackFile.close();
         } catch (IOException ex) {
-            ex.printStackTrace();
+            Alert alert = new Alert("Cannot close file", ex.getMessage(), null, null);
+            display.setCurrent(alert, trackerScreen);
         }
+    }
+
+    public void onNote() {
+        display.setCurrent(noteScreen);
+    }
+
+    public void onNoteOk(String note) {
+        this.note = note;
+        trackerScreen.setLatestNote(note);
+        display.setCurrent(trackerScreen);
     }
 }

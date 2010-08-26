@@ -58,11 +58,21 @@ class GpxUtil {
         return "</trkseg>\n</trk>\n</gpx>";
     }
 
+    static public String toName(String note) {
+        if (note == null) {
+            return "";
+        } else {
+            note = note.replace('&', ' ').replace('<', ' ').replace('>', ' ');
+            return "<name>" +  note + "</name>";
+        }
+    }
+
     static public String toGpx(double lat, double lon, double ele,
-            long timestamp) {
+            long timestamp, String note) {
 
         return "<trkpt lat=\"" + lat + "\" lon=\"" + lon + "\"><ele>" + ele
                 + "</ele><time>" + toISO8601Time(timestamp)
+                + toName(note) 
                 + "</time></trkpt>";
     }
 }
