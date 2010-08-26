@@ -28,19 +28,38 @@ import javax.microedition.io.file.FileConnection;
 
 class TrackFile {
 
-    private FileConnection fileConnection;
+    private OutputConnection outConn;
+    private PrintStream out;
+    private String filename;
+    private String path;
 
     TrackFile() {
+        filename = "osmlover.gpx";
+        path = "file:///E:/" + filename;
     }
 
-    public void start() throws IOException {
-//		String filename = "foo.txt";
-        OutputConnection connection = (OutputConnection) Connector.open(
-                "file:///e:/myfile.txt", Connector.WRITE);
-        OutputStream os = fileConnection.openOutputStream();
-        PrintStream printStream = new PrintStream(os);
-        printStream.println("Hi!");
-        printStream.close();
-        connection.close();
+    private void create(String path) throws IOException {
+        FileConnection conn = (FileConnection)Connector.open(path);
+        if(!conn.exists())
+            conn.create();
+        conn.close();
+    }
+
+    public void init() throws IOException {
+        create(path);
+        outConn = (OutputConnection)Connector.open(path, Connector.WRITE);
+        out = new PrintStream(outConn.openOutputStream());
+        out.println(GpxUtil.getHeader());
+    }
+
+    public void log(double lat, double lon, double ele,
+            long timestamp) {
+        out.println(GpxUtil.toGpx(lat, lon, ele, timestamp));
+    }
+
+    public void close() throws IOException {
+        out.println(GpxUtil.getFooter());
+        out.close();
+        outConn.close();
     }
 }
