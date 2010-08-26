@@ -19,6 +19,7 @@
 // THE SOFTWARE.
 package th.in.veer.osmlover;
 
+import java.util.Date;
 import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Displayable;
@@ -31,10 +32,11 @@ public class TrackerScreen extends Form implements CommandListener {
 
     private StringItem statusItem;
     private StringItem locationItem;
-    private StringItem annotLogItem;
+    private StringItem latestAnnotItem;
 
     private Command startCommand;
     private Command pauseCommand;
+    private Command noteCommand;
     private Command exitCommand;
 
     public TrackerScreen(OsmLoverController controller) {
@@ -42,22 +44,24 @@ public class TrackerScreen extends Form implements CommandListener {
         this.controller = controller;
         statusItem = new StringItem("Status", "Inactive");
         append(statusItem);
-        locationItem = new StringItem("Location", "...");
+        locationItem = new StringItem("Location", "");
         append(locationItem);
-        annotLogItem = new StringItem("Annotation Log", "");
-        append(annotLogItem);
+        latestAnnotItem = new StringItem("Latest annotation", "");
+        append(latestAnnotItem);
 
         startCommand = new Command("Start", Command.ITEM, 0);
         addCommand(startCommand);
         pauseCommand = new Command("Pause", Command.ITEM, 0);
         addCommand(pauseCommand);
+        noteCommand = new Command("Note", Command.ITEM, 0);
+        addCommand(noteCommand);
         exitCommand = new Command("Exit", Command.EXIT, 0);
         addCommand(exitCommand);
         setCommandListener(this);
     }
 
-    public void appendAnnotLog(String log) {
-        annotLogItem.setText(annotLogItem.getText() + " " + log);
+    public void setLatestNote(String note) {
+        latestAnnotItem.setText(note);
     }
 
     public void appendStatus(String status) {
@@ -72,6 +76,8 @@ public class TrackerScreen extends Form implements CommandListener {
                 controller.onLogPause();
             } else if (command == exitCommand) {
                 controller.onExit();
+            } else if (command == noteCommand) {
+                controller.onNote();
             }
         }
     }
