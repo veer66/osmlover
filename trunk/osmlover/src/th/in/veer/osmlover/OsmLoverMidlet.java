@@ -23,12 +23,29 @@ package th.in.veer.osmlover;
 import javax.microedition.midlet.*;
 
 public class OsmLoverMidlet extends MIDlet {
-    public void startApp() {
+
+    private OsmLoverController controller;
+    private boolean midletPaused;
+
+    public OsmLoverMidlet() {
+        midletPaused = false;
+        controller = new OsmLoverController(this);
     }
 
-    public void pauseApp() {
+    protected void destroyApp(boolean arg0) throws MIDletStateChangeException {
+        controller.saveLog();
     }
 
-    public void destroyApp(boolean unconditional) {
+    protected void pauseApp() {
+        // TODO Auto-generated method stub
+    }
+
+    protected void startApp() throws MIDletStateChangeException {
+        if (midletPaused) {
+            controller.onResume();
+        } else {
+            controller.onStart();
+        }
+        midletPaused = false;
     }
 }

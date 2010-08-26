@@ -20,7 +20,9 @@
 package th.in.veer.osmlover;
 
 import java.io.IOException;
+import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.Display;
+import javax.microedition.midlet.MIDletStateChangeException;
 
 class OsmLoverController {
 
@@ -47,23 +49,63 @@ class OsmLoverController {
 
     public void onResume() {
         display.setCurrent(trackerScreen);
-        // String loc = (new LocationHandler()).getLocation();
-        // trackerScreen.setStatus(loc);
-
     }
 
     public void onStart() {
+        onResume();
         locationHandler.startTracking();
-
+        try {
+            trackFile.init();
+        } catch (IOException ex) {
+            Alert alert = new Alert("Cannot open file", ex.getMessage(), null, null);
+            display.setCurrent(alert, trackerScreen);
+        }
     }
 
     public void updateLocationStatus(int status) {
         gpsStatus = status;
+        trackerScreen.setStatus(gpsStatus, logStatus);
     }
 
     public void updateLocation(double lat, double lon, double ele,
             long timestamp) {
         String gpxText = GpxUtil.toGpx(lat, lon, ele, timestamp);
-        trackerScreen.appendAnnotLog(gpxText);
+        trackerScreen.setLocation(lat, lon);
+        if(logStatus == OsmLoverController.TRACKING) {
+            trackFile.log(lat, lon, ele, timestamp);
+        }
+    }
+
+    public void onExit() {
+        try {
+            display.setCurrent(null);
+            midlet.destroyApp(true);
+            midlet.notifyDestroyed();
+        } catch (MIDletStateChangeException ex) {
+            Alert alert = new Alert("Cannot close file", ex.getMessage(), null, null);
+            display.setCurrent(alert, trackerScreen);
+        }
+    }
+
+    public void onLogPause() {
+        if (logStatus != OsmLoverController.PAUSE) {
+            logStatus = OsmLoverController.PAUSE;
+            trackerScreen.setStatus(gpsStatus, logStatus);
+        }
+    }
+
+    public void onLogStart() {
+        if (logStatus != OsmLoverController.TRACKING) {
+            logStatus = OsmLoverController.TRACKING;
+            trackerScreen.setStatus(gpsStatus, logStatus);
+        }
+    }
+
+    public void saveLog() {
+        try {
+            trackFile.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }

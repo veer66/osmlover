@@ -49,13 +49,13 @@ class GpxUtil {
 
     static public String getHeader() {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                + "<gpx version=\"1.0\">\n" + "<name>YaG</name>\n"
-                + "<trk><name>YaG Track</name>\n" + "<number>1</number>\n"
-                + "<trkseg>\n";
+                + "<gpx version=\"1.0\">\n" + "<name>OSM Lover</name>\n"
+                + "<trk><name>osmlover</name>\n" + "<number>1</number>\n"
+                + "<trkseg>";
     }
 
     static public String getFooter() {
-        return "</trkseg>\n</trk>\n</gpx>\n";
+        return "</trkseg>\n</trk>\n</gpx>";
     }
 
     static public String toGpx(double lat, double lon, double ele,
@@ -63,6 +63,6 @@ class GpxUtil {
 
         return "<trkpt lat=\"" + lat + "\" lon=\"" + lon + "\"><ele>" + ele
                 + "</ele><time>" + toISO8601Time(timestamp)
-                + "</time></trkpt>\n";
+                + "</time></trkpt>";
     }
 }

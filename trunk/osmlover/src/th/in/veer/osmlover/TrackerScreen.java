@@ -17,7 +17,6 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
 package th.in.veer.osmlover;
 
 import javax.microedition.lcdui.Command;
@@ -27,44 +26,69 @@ import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.StringItem;
 
 public class TrackerScreen extends Form implements CommandListener {
-	private OsmLoverController controller;
-	private StringItem statusItem;
-	private StringItem locationItem;
-	private StringItem annotLogItem;
-	private Command trackSwitchCommand;
 
-	public TrackerScreen(OsmLoverController controller) {
-		super("YaG Tracker");
-		this.controller = controller;
-		statusItem = new StringItem("Status", "Inactive");
-		append(statusItem);
-		locationItem = new StringItem("Location", "...");
-		append(locationItem);
-		annotLogItem = new StringItem("Annotation Log", "");
-		append(annotLogItem);
-		trackSwitchCommand = new Command("Start", Command.ITEM, 1);
-		addCommand(trackSwitchCommand);
-		setCommandListener(this);
-	}
+    private OsmLoverController controller;
 
-	public void setStatus(String status) {
-		statusItem.setText(status);
-	}
+    private StringItem statusItem;
+    private StringItem locationItem;
+    private StringItem annotLogItem;
 
-	public void appendAnnotLog(String log) {
-		annotLogItem.setText(annotLogItem.getText() + " " + log);
-	}
+    private Command startCommand;
+    private Command pauseCommand;
+    private Command exitCommand;
 
-	public void appendStatus(String status) {
-		statusItem.setText(statusItem.getText() + " " + status);
-	}
+    public TrackerScreen(OsmLoverController controller) {
+        super("OSM Lover");
+        this.controller = controller;
+        statusItem = new StringItem("Status", "Inactive");
+        append(statusItem);
+        locationItem = new StringItem("Location", "...");
+        append(locationItem);
+        annotLogItem = new StringItem("Annotation Log", "");
+        append(annotLogItem);
 
-	public void commandAction(Command command, Displayable displayable) {
-		if(displayable == this) {
-			if(command == trackSwitchCommand) {
-				appendAnnotLog("!!!");
-			}
-		}
-	}
+        startCommand = new Command("Start", Command.ITEM, 0);
+        addCommand(startCommand);
+        pauseCommand = new Command("Pause", Command.ITEM, 0);
+        addCommand(pauseCommand);
+        exitCommand = new Command("Exit", Command.EXIT, 0);
+        addCommand(exitCommand);
+        setCommandListener(this);
+    }
 
+    public void appendAnnotLog(String log) {
+        annotLogItem.setText(annotLogItem.getText() + " " + log);
+    }
+
+    public void appendStatus(String status) {
+        statusItem.setText(statusItem.getText() + " " + status);
+    }
+
+    public void commandAction(Command command, Displayable displayable) {
+        if (displayable == this) {
+            if (command == startCommand) {
+                controller.onLogStart();
+            } else if (command == pauseCommand) {
+                controller.onLogPause();
+            } else if (command == exitCommand) {
+                controller.onExit();
+            }
+        }
+    }
+
+    public void setLocation(double lat, double lon) {
+        locationItem.setText(lat + " " + lon);
+    }
+
+    void setStatus(int gpsStatus, int logStatus) {
+        if(gpsStatus == OsmLoverController.INACTIVE) {
+            statusItem.setText("Inactive");
+        } else {
+            if(logStatus == OsmLoverController.TRACKING) {
+                statusItem.setText("Tracking");
+            } else {
+                statusItem.setText("Pause");
+            }
+        }
+    }
 }
