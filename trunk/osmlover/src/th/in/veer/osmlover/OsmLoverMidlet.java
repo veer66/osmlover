@@ -34,7 +34,7 @@ public class OsmLoverMidlet extends MIDlet {
     }
 
     protected void destroyApp(boolean arg0) throws MIDletStateChangeException {
-        controller.saveLog();
+
     }
 
     protected void pauseApp() {
