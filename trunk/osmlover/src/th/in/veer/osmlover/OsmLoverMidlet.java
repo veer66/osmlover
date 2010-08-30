@@ -21,6 +21,7 @@
 package th.in.veer.osmlover;
 
 import javax.microedition.midlet.*;
+import th.in.veer.osmlover.OsmLoverController;
 
 public class OsmLoverMidlet extends MIDlet {
 
