@@ -107,13 +107,8 @@ public class OsmLoverController {
         }
     }
 
-    public void saveLog() {
-        try {
-            trackFile.close();
-        } catch (IOException ex) {
-            Alert alert = new Alert("Cannot close file", ex.getMessage(), null, null);
-            display.setCurrent(alert, trackerScreen);
-        }
+    public void saveLog() throws IOException {
+        trackFile.close();
     }
 
     public void onNote() {
@@ -124,5 +119,15 @@ public class OsmLoverController {
         this.note = note;
         trackerScreen.setLatestNote(note);
         display.setCurrent(trackerScreen);
+    }
+
+    public void onSave() {
+        try {
+            saveLog();
+        } catch (Exception e) {
+            Alert alert = new Alert("Cannot save file", e.getMessage(), null, null);
+            display.setCurrent(alert, trackerScreen);
+        }
+        onExit();
     }
 }

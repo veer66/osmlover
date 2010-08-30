@@ -30,14 +30,13 @@ import th.in.veer.osmlover.OsmLoverController;
 public class TrackerScreen extends Form implements CommandListener {
 
     private OsmLoverController controller;
-
     private StringItem statusItem;
     private StringItem locationItem;
     private StringItem latestAnnotItem;
-
     private Command startCommand;
     private Command pauseCommand;
     private Command noteCommand;
+    private Command saveCommand;
     private Command exitCommand;
 
     public TrackerScreen(OsmLoverController controller) {
@@ -56,6 +55,8 @@ public class TrackerScreen extends Form implements CommandListener {
         addCommand(pauseCommand);
         noteCommand = new Command("Note", Command.ITEM, 0);
         addCommand(noteCommand);
+        saveCommand = new Command("Save", Command.ITEM, 0);
+        addCommand(saveCommand);
         exitCommand = new Command("Exit", Command.EXIT, 0);
         addCommand(exitCommand);
         setCommandListener(this);
@@ -75,10 +76,12 @@ public class TrackerScreen extends Form implements CommandListener {
                 controller.onLogStart();
             } else if (command == pauseCommand) {
                 controller.onLogPause();
-            } else if (command == exitCommand) {
-                controller.onExit();
             } else if (command == noteCommand) {
                 controller.onNote();
+            } else if (command == saveCommand) {
+                controller.onSave();
+            } else if (command == exitCommand) {
+                controller.onExit();
             }
         }
     }
@@ -88,10 +91,10 @@ public class TrackerScreen extends Form implements CommandListener {
     }
 
     public void setStatus(int gpsStatus, int logStatus) {
-        if(gpsStatus == OsmLoverController.INACTIVE) {
+        if (gpsStatus == OsmLoverController.INACTIVE) {
             statusItem.setText("Inactive");
         } else {
-            if(logStatus == OsmLoverController.TRACKING) {
+            if (logStatus == OsmLoverController.TRACKING) {
                 statusItem.setText("Tracking");
             } else {
                 statusItem.setText("Pause");
