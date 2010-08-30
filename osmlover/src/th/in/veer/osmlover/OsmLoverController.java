@@ -19,12 +19,15 @@
 // THE SOFTWARE.
 package th.in.veer.osmlover;
 
+import th.in.veer.osmlover.model.TrackFile;
+import th.in.veer.osmlover.view.NoteScreen;
+import th.in.veer.osmlover.view.TrackerScreen;
 import java.io.IOException;
 import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.Display;
 import javax.microedition.midlet.MIDletStateChangeException;
 
-class OsmLoverController {
+public class OsmLoverController {
 
     private OsmLoverMidlet midlet;
     private Display display;
@@ -39,7 +42,6 @@ class OsmLoverController {
     public static final int TRACKING = 1;
     private int gpsStatus = OsmLoverController.INACTIVE;
     private int logStatus = OsmLoverController.PAUSE;
-
     private String note;
 
     public OsmLoverController(OsmLoverMidlet midlet) {
@@ -76,7 +78,7 @@ class OsmLoverController {
             long timestamp) {
         trackerScreen.setLocation(lat, lon);
 
-        if(logStatus == OsmLoverController.TRACKING) {
+        if (logStatus == OsmLoverController.TRACKING) {
             trackFile.log(lat, lon, ele, timestamp, note);
             note = null;
         }
@@ -88,7 +90,6 @@ class OsmLoverController {
             midlet.destroyApp(true);
             midlet.notifyDestroyed();
         } catch (MIDletStateChangeException ex) {
-
         }
     }
 

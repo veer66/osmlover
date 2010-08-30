@@ -17,7 +17,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-package th.in.veer.osmlover;
+package th.in.veer.osmlover.view;
 
 import java.util.Date;
 import javax.microedition.lcdui.Command;
@@ -25,6 +25,7 @@ import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.StringItem;
+import th.in.veer.osmlover.OsmLoverController;
 
 public class TrackerScreen extends Form implements CommandListener {
 
@@ -86,7 +87,7 @@ public class TrackerScreen extends Form implements CommandListener {
         locationItem.setText(lat + " " + lon);
     }
 
-    void setStatus(int gpsStatus, int logStatus) {
+    public void setStatus(int gpsStatus, int logStatus) {
         if(gpsStatus == OsmLoverController.INACTIVE) {
             statusItem.setText("Inactive");
         } else {

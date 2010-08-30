@@ -18,13 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package th.in.veer.osmlover;
+package th.in.veer.osmlover.view;
 
 import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.TextBox;
 import javax.microedition.lcdui.TextField;
+import th.in.veer.osmlover.OsmLoverController;
 
 public class NoteScreen extends TextBox implements CommandListener {
 

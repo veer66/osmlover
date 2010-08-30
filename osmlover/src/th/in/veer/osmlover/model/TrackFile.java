@@ -17,8 +17,9 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-package th.in.veer.osmlover;
+package th.in.veer.osmlover.model;
 
+import th.in.veer.osmlover.helper.GpxUtil;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -26,14 +27,14 @@ import javax.microedition.io.Connector;
 import javax.microedition.io.OutputConnection;
 import javax.microedition.io.file.FileConnection;
 
-class TrackFile {
+public class TrackFile {
 
     private OutputConnection outConn;
     private PrintStream out;
     private String filename;
     private String path;
 
-    TrackFile() {
+    public TrackFile() {
         filename = "osmlover.gpx";
         path = "file:///E:/" + filename;
     }
